@@ -1,0 +1,51 @@
+$focfg: #A7C080;
+$cursor: #ebe2cf;
+$bg: #2c343a;
+$btnbg: rgba(44*1.3, 52*1.3, 58*1.3, 0.2);
+$btnbghov: rgba(44*1.3, 52*1.3, 58*1.3, 0.5);
+$fg: #e7dcc4;
+$color0: #2c343a;
+$color1: #e67c7f;
+$color2: #a9c181;
+$color3: #ddbd7f;
+$color4: #7fbcb4;
+$color5: #d69ab7;
+$color6: #83c193;
+$color7: #e7dcc4;
+$color8: #ed9294;
+$color9: #b0ce7b;
+
+* {
+  font-family: FiraCode Nerd Regular;
+}
+
+window {
+  background: transparent;
+}
+
+.topbar {
+  color: $fg;
+  background: rgba($bg, 0.9);
+}
+
+button {
+  color: $fg;
+  background: $btnbg;
+  border: 0;
+
+  &:hover {
+    background-color: $btnbghov;
+  }
+}
+
+.focused {
+  color: $focfg;
+  font-weight: bold;
+  background-color: $btnbghov;
+}
+
+.systray>* {
+  &:hover {
+    background-color: $btnbghov;
+  }
+}

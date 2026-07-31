@@ -1,0 +1,122 @@
+(defwindow bar
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "0%"
+                               :width "100%"
+                               :height "25px"
+                               :anchor "top center")
+           :stacking "fg"
+           :exclusive true
+           :windowtype "dock"
+           :wm-ignore false
+  (topbar))
+
+(defwindow calwin
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "350px"
+                      :anchor "top center")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+(bigcal))
+
+
+(defvar time-visible false)
+(defvar dd `date %d`)
+(defvar mm `date %m`)
+(defvar yy `date %Y`)
+(defvar cal-open false)
+;; (defvar layer "")
+
+(defpoll time :interval "1s"
+              :initial ""
+              :run-while time-visible
+`date "+%a, %b %d %-I:%M"`)
+
+(defpoll wifi-state :interval "5s"
+  `cat /sys/class/net/wlan0/operstate`)
+
+(defpoll check-packages :interval "30m"
+  `checkupdates | wc -l`)
+
+(deflisten focused-ws :initial "0"
+  `mmsg watch tags DP-3 | jq --unbuffered '.tags[] | select(.is_active == true) | .index'`)
+
+(deflisten layer :initial "null"
+  `$HOME/.cargo/bin/klm`)
+
+(defwidget workspaces []
+  (box :space-evenly false
+    (for t in "[1,2,3,4,5,6,7,8,9]"
+      (button :class "${focused-ws == t ? 'focused' : 'ws'}" :onclick "mmsg dispatch view,${t},1,0" t))))
+
+(defwidget kanata []
+  (label :text layer))
+
+(defwidget datetime []
+  (button :class "datetime"
+          :onclick 
+          {cal-open ? "eww close calwin; eww update cal-open=false" : "eww open calwin; eww update cal-open=true"}
+  time))
+
+
+(defwidget bigcal []
+  (box
+    (calendar :day dd
+              :month mm
+              :year yy
+              :show-details true
+              :show-heading true
+              :show-day-names true)))
+
+(defwidget packs []
+  (button :onclick `kitty --title "pack updates" paru -Syu`
+          :timeout "24h"
+  "  ${check-packages}"))
+
+(defwidget wifi []
+  (label :text {wifi-state == "up" ?"󰖩" : "󰖪"}))
+
+(defwidget sys []
+  (systray :class "systray"
+           :halign "end"
+           :space-evenly true
+           :spacing 10
+           :style "padding-left: 10px;"
+           :orientation "h"
+           :icon-size 18
+           :prepend-new false))
+
+(defwidget cpu []
+  (label :text "   ${EWW_CPU.cores[0].usage}%"))
+
+;; (defwidget ram []
+  ;; (label :text "  ${EWW_RAM.used_mem}%"))
+
+(defwidget topbar-left []
+  (box :space-evenly false
+    (workspaces)
+    (kanata)))
+
+(defwidget topbar-center []
+  (box
+    (datetime)))
+
+(defwidget topbar-right []
+  (box :space-evenly false
+       :spacing 10
+       :halign "end"
+       :style "padding-right: 10px;"
+    (packs)
+    (cpu)
+    (wifi)
+    (sys)))
+
+(defwidget topbar []
+  (centerbox :class "topbar"
+             :orientation "h"
+             (topbar-left)
+             (topbar-center)
+             (topbar-right)))
