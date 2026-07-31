@@ -31,14 +31,16 @@
 (defvar pow-hov false)
 (defvar hw-hov false)
 (defvar vol-hov false)
+(defvar checking-vol true)
+(defvar vol-level 0)
+
+(defpoll vol-state :interval "1s" :run-while checking-vol
+  `./scripts/check-vol.sh`)
 
 (defpoll time :interval "1s"
               :initial ""
               :run-while time-visible
 `date "+%a, %b %d %-I:%M"`)
-
-(defpoll wifi-state :interval "5s"
-  `cat /sys/class/net/wlan0/operstate`)
 
 (defpoll check-packages :interval "30m"
   `checkupdates | wc -l`)
@@ -77,9 +79,6 @@
   (button :onclick `kitty --title "pack updates" /usr/bin/env sh -c 'paru -Syu && echo Done && read'`
           :timeout "24h"
   "  ${check-packages}"))
-
-(defwidget wifi []
-  (label :text {wifi-state == "up" ?"󰖩" : "󰖪"}))
 
 (defwidget sys []
   (systray :class "systray"
@@ -120,7 +119,7 @@
         (box
           (button :onclick `pidof mango | xargs kill` "󰗼")
           (button :onclick `reboot` "")))
-      (button :onclick `poweroff` "󰐥"))))
+      (button :onclick `shutdown -h now` "󰐥"))))
 
 (defwidget topbar-left []
   (box :space-evenly false
@@ -143,12 +142,18 @@
         (revealer :transition "slideleft"
                   :reveal vol-hov
                   :duration "500ms"
-          (scale :round-digits 0
-                 :value 50
+          (scale :class "volume"
+                 :width 150
+                 :draw-value true
+                 :value-pos "right"
+                 :round-digits 0
+                 :value vol-level
                  :min 0
                  :max 100
-                 :orientation "h"))
-        (button "")))
+                 :orientation "h"
+                 :onchange `amixer sset Master {}%`))
+        (button :onclick `amixer set Master toggle; eww poll vol-state`
+          {vol-state == "muted" ? "" : ""})))
     (hw)
     (sys)
     (pow)))
