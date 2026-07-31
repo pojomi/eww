@@ -28,7 +28,9 @@
 (defvar mm `date %m`)
 (defvar yy `date %Y`)
 (defvar cal-open false)
-;; (defvar layer "")
+(defvar pow-hov false)
+(defvar hw-hov false)
+(defvar vol-hov false)
 
 (defpoll time :interval "1s"
               :initial ""
@@ -72,7 +74,7 @@
               :show-day-names true)))
 
 (defwidget packs []
-  (button :onclick `kitty --title "pack updates" paru -Syu`
+  (button :onclick `kitty --title "pack updates" /usr/bin/env sh -c 'paru -Syu && echo Done && read'`
           :timeout "24h"
   "  ${check-packages}"))
 
@@ -90,10 +92,35 @@
            :prepend-new false))
 
 (defwidget cpu []
-  (label :text "   ${EWW_CPU.cores[0].usage}%"))
+  (label :text "CPU: ${round(EWW_CPU.avg, 0)}%"))
 
-;; (defwidget ram []
-  ;; (label :text "  ${EWW_RAM.used_mem}%"))
+(defwidget ram []
+ (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 0)}%"))
+
+(defwidget hw []
+  (eventbox :onhover `eww update hw-hov=true`
+            :onhoverlost `eww update hw-hov=false`
+    (box :space-evenly false
+      (revealer :transition "slideleft"
+                :reveal hw-hov
+                :duration "500ms"
+        (box :style "padding-right: 4px;"
+             :spacing 4
+          (cpu)
+          (ram)))
+      (label :text "󰍛 "))))
+
+(defwidget pow []
+  (eventbox :onhover `eww update pow-hov=true`
+            :onhoverlost `eww update pow-hov=false`
+    (box :space-evenly false
+      (revealer :transition "slideleft"
+                :reveal pow-hov
+                :duration "500ms"
+        (box
+          (button :onclick `pidof mango | xargs kill` "󰗼")
+          (button :onclick `reboot` "")))
+      (button :onclick `poweroff` "󰐥"))))
 
 (defwidget topbar-left []
   (box :space-evenly false
@@ -110,9 +137,21 @@
        :halign "end"
        :style "padding-right: 10px;"
     (packs)
-    (cpu)
-    (wifi)
-    (sys)))
+    (eventbox :onhover `eww update vol-hov=true`
+              :onhoverlost `eww update vol-hov=false`
+      (box :space-evenly false
+        (revealer :transition "slideleft"
+                  :reveal vol-hov
+                  :duration "500ms"
+          (scale :round-digits 0
+                 :value 50
+                 :min 0
+                 :max 100
+                 :orientation "h"))
+        (button "")))
+    (hw)
+    (sys)
+    (pow)))
 
 (defwidget topbar []
   (centerbox :class "topbar"
