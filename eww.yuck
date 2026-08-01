@@ -118,8 +118,8 @@
                 :duration "500ms"
         (box
           (button :onclick `pidof mango | xargs kill` "󰗼")
-          (button :onclick `reboot` "")))
-      (button :onclick `shutdown -h now` "󰐥"))))
+          (button :onclick `systemctl reboot` "")))
+      (button :onclick `systemctl poweroff` "󰐥"))))
 
 (defwidget topbar-left []
   (box :space-evenly false

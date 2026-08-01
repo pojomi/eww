@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
 
-if $(amixer get Master | grep -q '\[off\]'); then
-  echo muted
-else
-  false
-fi
+check_vol() {
+  while ! pidof pipewire-pulse >/dev/null; do
+    sleep 1s
+  done
 
-eww u vol-level=$(amixer sget Master | awk -F"[][]" '/Left:/ { gsub(/%/, ""); print $2 }')
-eww u checking-vol=false
+  IFS=" "
+  local state=($(amixer get Master | tail -n 1 | tr -d '[]%'))
+  state=("${state[@]: -2:2}")
+  unset IFS
+
+  if [[ ${state[1]} == "off" ]]; then
+    echo muted
+  elif [[ ${state[1]} == "on" ]]; then
+    echo on
+  fi
+  eww u vol-level=${state[0]}
+  eww u checking-vol=false
+}
+
+check_vol
