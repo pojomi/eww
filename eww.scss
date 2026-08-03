@@ -30,7 +30,7 @@ window {
 
 button {
   color: $fg;
-  background: $btnbg;
+  background: transparent;
   border: 0;
 
   &:hover {
@@ -44,7 +44,12 @@ button {
   background-color: $btnbghov;
 }
 
-.systray>* {
+label {
+  min-height: 16px;
+  min-width: 24px;
+}
+
+.systray>widget {
   &:hover {
     background-color: $btnbghov;
   }

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 check_vol() {
-  while ! pidof pipewire-pulse >/dev/null; do
-    sleep 1s
-  done
-
+  # while ! pidof pipewire-pulse >/dev/null; do
+  #   sleep 1s
+  # done
+  #
   IFS=" "
   local state=($(amixer get Master | tail -n 1 | tr -d '[]%'))
   state=("${state[@]: -2:2}")

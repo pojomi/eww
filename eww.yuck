@@ -22,6 +22,18 @@
   :focusable false
 (bigcal))
 
+; (defwindow audio
+;   :monitor 0
+;   :geometry (geometry :width "250px"
+;                       :height "125px"
+;                       :x "150px"
+;                       :y "5px"
+;                       :anchor "top right")
+;   :stacking "fg"
+;   :exclusive false
+;   :focusable false
+;   (box (button "foo")))
+
 
 (defvar time-visible false)
 (defvar dd `date %d`)
@@ -29,10 +41,11 @@
 (defvar yy `date %Y`)
 (defvar cal-open false)
 (defvar pow-hov false)
-(defvar hw-hov false)
+(defvar hw-show false)
 (defvar vol-hov false)
 (defvar checking-vol true)
 (defvar vol-level 0)
+(defvar show-vol false)
 
 (defpoll vol-state :interval "1s" :run-while checking-vol
   `./scripts/check-vol.sh`)
@@ -85,33 +98,25 @@
            :halign "end"
            :space-evenly true
            :spacing 10
-           :style "padding-left: 10px;"
            :orientation "h"
            :icon-size 18
            :prepend-new false))
 
-(defwidget cpu []
-  (label :text "CPU: ${round(EWW_CPU.avg, 0)}%"))
-
-(defwidget ram []
- (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 0)}%"))
-
 (defwidget hw []
-  (eventbox :onhover `eww update hw-hov=true`
-            :onhoverlost `eww update hw-hov=false`
-    (box :space-evenly false
-      (revealer :transition "slideleft"
-                :reveal hw-hov
-                :duration "500ms"
-        (box :style "padding-right: 4px;"
-             :spacing 4
-          (cpu)
-          (ram)))
-      (label :text "󰍛 "))))
+  (box :space-evenly false
+    (revealer :transition "slideleft"
+              :reveal hw-show
+              :duration "500ms"
+      (box :style "padding-right: 4px;"
+            :spacing 4
+        (label :text "CPU: ${round(EWW_CPU.avg, 0)}%")
+        (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 0)}%")))
+    (button :onclick { hw-show ? `eww u hw-show=false` : `eww u hw-show=true` } "󰍛 ")))
 
 (defwidget pow []
   (eventbox :onhover `eww update pow-hov=true`
             :onhoverlost `eww update pow-hov=false`
+            :style "padding: 9px;"
     (box :space-evenly false
       (revealer :transition "slideleft"
                 :reveal pow-hov
@@ -132,10 +137,11 @@
 
 (defwidget topbar-right []
   (box :space-evenly false
-       :spacing 10
+       :spacing "9px"
        :halign "end"
-       :style "padding-right: 10px;"
     (packs)
+    (hw)
+    (sys)
     (eventbox :onhover `eww update vol-hov=true`
               :onhoverlost `eww update vol-hov=false`
       (box :space-evenly false
@@ -153,9 +159,8 @@
                  :orientation "h"
                  :onchange `amixer sset Master {}%`))
         (button :onclick `amixer set Master toggle; eww poll vol-state`
+            ;;; :onrightclick {show-vol ? `eww u show-vol=false; eww c audio` : `eww u show-vol=true; eww o audio`}
           {vol-state == "muted" ? "" : ""})))
-    (hw)
-    (sys)
     (pow)))
 
 (defwidget topbar []
