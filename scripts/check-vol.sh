@@ -1,22 +1,27 @@
 #!/usr/bin/env bash
 
-check_vol() {
-  # while ! pidof pipewire-pulse >/dev/null; do
-  #   sleep 1s
-  # done
-  #
-  IFS=" "
-  local state=($(amixer get Master | tail -n 1 | tr -d '[]%'))
-  state=("${state[@]: -2:2}")
-  unset IFS
+while ! eww ping >/dev/null; do
+  sleep 1s
+done
 
-  if [[ ${state[1]} == "off" ]]; then
-    echo muted
-  elif [[ ${state[1]} == "on" ]]; then
-    echo on
-  fi
-  eww u vol-level=${state[0]}
-  eww u checking-vol=false
+call_mixer() {
+  IFS=" "
+  local -a state
+  until ((${#state[@]} == 2)); do
+    state=($(amixer get Master | tail -n 1 | tr -d '[]%'))
+    state=(${state[@]: -2:2})
+  done
+  echo "${state[@]}"
+  unset IFS
 }
 
-check_vol
+mixer_state=($(call_mixer))
+
+if [[ ${mixer_state[1]} == "off" ]]; then
+  eww u muted=true
+elif [[ ${mixer_state[1]} == "on" ]]; then
+  eww u muted=false
+fi
+eww u vol-level=${mixer_state[0]}
+echo -e "amixer output values on startup:\nmixer_state: ${mixer_state[1]}\n${mixer_state[0]}" >$HOME/eww-script.log
+unset mixer_state
