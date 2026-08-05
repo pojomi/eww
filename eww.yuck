@@ -87,7 +87,7 @@
               :show-day-names true)))
 
 (defwidget packs []
-  (button :onclick `kitty --title "pack updates" /usr/bin/env sh -c 'paru -Syu && echo Done && read'`
+  (button :onclick `/usr/bin/sh -c "$HOME/.config/eww/scripts/check-packs.sh"`
           :timeout "24h"
   "  ${check-packages}"))
 
