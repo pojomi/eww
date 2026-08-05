@@ -87,7 +87,7 @@
               :show-day-names true)))
 
 (defwidget packs []
-  (button :onclick `/usr/bin/sh -c "$HOME/.config/eww/scripts/check-packs.sh"`
+  (button :onclick `$HOME/.local/bin/check-packs`
           :timeout "24h"
   "  ${check-packages}"))
 
