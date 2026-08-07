@@ -33,14 +33,16 @@
   (scroll :width "250px"
           :vscroll true
           :hscroll false
+          :class "notifs"
+          :padding 2
     (box :orientation "v"
          :space-evenly false
-         :spacing 10
+         :spacing 5
       (for n in dunst-notifs
         (box :orientation "v"
-            :space-evenly false
+             :space-evenly false
           (label :width "250px" :wrap false :markup "<b>${replace(n.app, '<[^>]*>', '')}</b>")
-          (label :width "250px" :wrap true :text "${replace(n.body, '<[^>]*>', '')}"))))))
+          (label :width "250px" :class "notif" :wrap true :text "${replace(n.body, '<[^>]*>', '')}"))))))
 
 (defvar time-visible false)
 (defvar dd `date %d`)

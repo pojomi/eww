@@ -23,6 +23,14 @@ window {
   background: transparent;
 }
 
+.notifs {
+  background: $bg;
+}
+
+.notif {
+  border-bottom: 1px solid $fg;
+}
+
 .topbar {
   color: $fg;
   background: rgba($bg, 0.9);
