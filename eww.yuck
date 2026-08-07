@@ -46,6 +46,7 @@
 (defvar vol-level 0)
 (defvar show-vol false)
 (defvar muted false)
+(defvar have-notifications false)
 
 
 (defpoll time :interval "1s"
@@ -140,6 +141,8 @@
     (packs)
     (hw)
     (sys)
+    (button :onclick `eww u have-notifications=false`
+      {have-notifications ? "" : ""})
     (eventbox :onhover `eww update vol-hov=true`
               :onhoverlost `eww update vol-hov=false`
       (box :space-evenly false
