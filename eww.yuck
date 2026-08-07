@@ -22,18 +22,25 @@
   :focusable false
 (bigcal))
 
-; (defwindow audio
-;   :monitor 0
-;   :geometry (geometry :width "250px"
-;                       :height "125px"
-;                       :x "150px"
-;                       :y "5px"
-;                       :anchor "top right")
-;   :stacking "fg"
-;   :exclusive false
-;   :focusable false
-;   (box (button "foo")))
-
+(defwindow dunst
+  :monitor 0
+  :geometry (geometry :height "300px"
+                      :width "250px"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (scroll :width "250px"
+          :vscroll true
+          :hscroll false
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 10
+      (for n in dunst-notifs
+        (box :orientation "v"
+            :space-evenly false
+          (label :width "250px" :wrap false :markup "<b>${replace(n.app, '<[^>]*>', '')}</b>")
+          (label :width "250px" :wrap true :text "${replace(n.body, '<[^>]*>', '')}"))))))
 
 (defvar time-visible false)
 (defvar dd `date %d`)
@@ -47,7 +54,8 @@
 (defvar show-vol false)
 (defvar muted false)
 (defvar have-notifications false)
-
+(defvar dunst-notifs "")
+(defvar dunst-open false)
 
 (defpoll time :interval "1s"
               :initial ""
@@ -141,7 +149,7 @@
     (packs)
     (hw)
     (sys)
-    (button :onclick `eww u have-notifications=false`
+    (button :onclick {dunst-open ? `eww u dunst-open=false; eww close dunst` : `$HOME/.local/bin/dunst-json`}
       {have-notifications ? "" : ""})
     (eventbox :onhover `eww update vol-hov=true`
               :onhoverlost `eww update vol-hov=false`

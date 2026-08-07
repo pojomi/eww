@@ -6,7 +6,10 @@ dunst_json() {
     | select(.urgency.data == "NORMAL")
     | {app: .appname.data, body: .message.data}
   ]')
-  eww update dunst-notifs="$js"
+  eww u dunst-notifs="$js"
+  eww u dunst-open=true
+  eww u have-notifications=false
+  eww open dunst
 }
 
 dunst_json
