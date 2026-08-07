@@ -167,9 +167,8 @@
                  :max 100
                  :orientation "h"
                  :onchange `amixer sset Master {}%`))
-        (button :onclick "amixer set Master toggle;{show-vol ? `eww u muted=false;` : `eww u muted=true`}"
-                         
-            ;;; :onrightclick {show-vol ? `eww u show-vol=false; eww c audio` : `eww u show-vol=true; eww o audio`}
+        (button :onclick "amixer set Master toggle; ${muted ? `eww u muted=false;` : `eww u muted=true`}"
+                :onrightclick `$HOME/.local/bin/eww-open-pavu`
           {muted ? "" : ""})))
     (pow)))
 
