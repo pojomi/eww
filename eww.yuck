@@ -26,24 +26,40 @@
   :monitor 0
   :geometry (geometry :height "300px"
                       :width "250px"
+                      :y "5px"
                       :anchor "top right")
   :stacking "fg"
   :exclusive false
   :focusable false
-  (scroll :width "250px"
+  (dunst-scroll))
+
+(defwidget dunst-scroll []
+  (scroll 
           :vscroll true
           :hscroll false
-          :class "notifs"
+          :class `notifs`
           :padding 2
-    (box :orientation "v"
-         :space-evenly false
-         :spacing 5
+    (box :orientation `v`
+          :class `notifs-box`
+          :space-evenly false
+          :spacing 5
       (for n in dunst-notifs
-        (box :orientation "v"
-             :space-evenly false
-          (label :width "250px" :wrap false :markup "<b>${replace(n.app, '<[^>]*>', '')}</b>")
-          (label :width "250px" :class "notif" :wrap true :text "${replace(n.body, '<[^>]*>', '')}"))))))
+        (literal :content "(dunst-btn-dyn :app `${n.app}` :txt `${n.body}` :id ${n.id})")))))
+;        (eventbox :class `notifs-event`
+;          (box :orientation `v` :halign `start` :space-evenly false
+;            (button :onrightclick `dunstctl history-rm ${n.id}; $EWW_CONFIG_DIR/scripts/eww-dunst-json;`
+;              (box :orientation `v` :space-evenly false
+;              (label :xalign 0 :wrap false :markup `<b>${n.app}</b>`)
+;              (label :xalign 0 :wrap true :class `notif` :text {n.body}))))))))
 
+(defwidget dunst-btn-dyn [app txt id]
+  (box :orientation "v" 
+       :halign "start"
+       :space-evenly false
+    (button :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh ${id}` 
+      (box :orientation "v"
+        (label :xalign 0 :wrap false :text {app})
+        (label :xalign 0 :wrap true :class `notif` :text {txt})))))
 (defvar time-visible false)
 (defvar dd `date %d`)
 (defvar mm `date %m`)
@@ -98,7 +114,7 @@
               :show-day-names true)))
 
 (defwidget packs []
-  (button :onclick `$HOME/.local/bin/check-packs`
+  (button :onclick `${EWW_CONFIG_DIR}/scripts/eww-check-packs.sh`
           :timeout "24h"
   "  ${check-packages}"))
 
@@ -151,7 +167,7 @@
     (packs)
     (hw)
     (sys)
-    (button :onclick {dunst-open ? `eww u dunst-open=false; eww close dunst` : `$HOME/.local/bin/dunst-json`}
+    (button :onclick {dunst-open ? `eww u dunst-open=false; eww close dunst` : `${EWW_CONFIG_DIR}/scripts/eww-dunst-json.sh`}
       {have-notifications ? "" : ""})
     (eventbox :onhover `eww update vol-hov=true`
               :onhoverlost `eww update vol-hov=false`
@@ -170,7 +186,7 @@
                  :orientation "h"
                  :onchange `amixer sset Master {}%`))
         (button :onclick "amixer set Master toggle; ${muted ? `eww u muted=false;` : `eww u muted=true`}"
-                :onrightclick `$HOME/.local/bin/eww-open-pavu`
+                :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-open-pavu.sh`
           {muted ? "" : ""})))
     (pow)))
 
