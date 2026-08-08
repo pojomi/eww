@@ -1,0 +1,9 @@
+(deflisten focused-ws :initial "0"
+  `mmsg watch tags DP-3 | jq --unbuffered '.tags[] | select(.is_active == true) | .index'`)
+
+(defwidget workspaces []
+  (box :space-evenly false
+    (for t in "[1,2,3,4,5,6,7,8,9]"
+      (button :class "${focused-ws == t ? 'focused' : 'ws'}" :onclick "mmsg dispatch view,${t},1,0" t))))
+
+

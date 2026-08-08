@@ -1,0 +1,26 @@
+(defvar vol-hov false)
+(defvar vol-level 0)
+(defvar show-vol false)
+(defvar muted false)
+
+(defwidget volume []
+  (eventbox :onhover `eww update vol-hov=true`
+   :onhoverlost `eww update vol-hov=false`
+   (box :space-evenly false
+    (revealer :transition "slideleft"
+     :reveal vol-hov
+     :duration "500ms"
+     (scale :class "volume"
+      :width 150
+      :draw-value true
+      :value-pos "right"
+      :round-digits 0
+      :value vol-level
+      :min 0
+      :max 100
+      :orientation "h"
+      :onchange `amixer sset Master {}%`))
+    (button :onclick "amixer set Master toggle; ${muted ? `eww u muted=false;` : `eww u muted=true`}"
+     :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-open-pavu.sh`
+     {muted ? "" : ""}))))
+

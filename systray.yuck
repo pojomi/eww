@@ -1,0 +1,10 @@
+(defwidget sys []
+  (systray :class "systray"
+           :halign "end"
+           :space-evenly true
+           :spacing 10
+           :orientation "h"
+           :icon-size 18
+           :prepend-new false))
+
+

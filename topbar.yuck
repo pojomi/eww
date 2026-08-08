@@ -1,0 +1,27 @@
+(defwidget topbar-left []
+  (box :space-evenly false
+    (workspaces)
+    (kanata)))
+
+(defwidget topbar-center []
+  (box
+    (datetime)))
+
+(defwidget topbar-right []
+  (box :space-evenly false
+       :spacing "9px"
+       :halign "end"
+    (packs)
+    (hw)
+    (sys)
+    (notification-bell :icon bell)
+    (volume)
+    (pow)))
+
+(defwidget topbar []
+  (centerbox :class "topbar"
+             :orientation "h"
+             (topbar-left)
+             (topbar-center)
+             (topbar-right)))
+

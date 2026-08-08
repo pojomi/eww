@@ -1,0 +1,48 @@
+(defvar dunst "")
+(defvar dunst.is_open false)
+(defvar dunst.has_notifications false)
+(defvar bell "")
+
+(defwindow dunst-win
+  :monitor 0
+  :geometry (geometry :height "300px"
+                      :width "250px"
+                      :y "5px"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (dunst-scroll))
+
+  (defwidget notification-bell [icon]
+    (button :onclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-toggle.sh`
+      icon))
+
+(defwidget dunst-scroll []
+    (scroll
+            :vscroll true
+            :hscroll false
+            :class "notifs"
+            :padding 2
+            :height 300
+            :width 250
+      (box :orientation "v"
+            :class "notifs-box"
+            :space-evenly false
+            :spacing 5
+        (eventbox :onclick "${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh;"
+          (button :halign "end"
+            (label :class "notifs-clear"
+              :text "Clear All")))
+        (label :text {arraylength(dunst) > 0 ? "${dunst[0].count} notifications" : "No notifications"})
+      (for n in dunst
+        (literal :content
+          `(dunst-btn-dyn :app {n.app} :body {n.body} :id {n.id})`)))))
+          
+
+
+(defwidget dunst-btn-dyn [app body id]
+    (button :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh ${id}`
+      (box :orientation "v" :space-evenly false
+        (label :xalign 0 :wrap false :text {app})
+        (label :xalign 0 :wrap true :class `notif` :text {body}))))

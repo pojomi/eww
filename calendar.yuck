@@ -1,0 +1,39 @@
+(defvar time-visible false)
+(defvar dd `date %d`)
+(defvar mm `date %m`)
+(defvar yy `date %Y`)
+(defvar cal-open false)
+
+(defpoll time :interval "1s"
+              :initial ""
+              :run-while time-visible
+`date "+%a, %b %d %-I:%M"`)
+
+(defwindow calwin
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "350px"
+                      :anchor "top center")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+(bigcal))
+
+(defwidget datetime []
+  (button :class "datetime"
+          :onclick 
+          {cal-open ? "eww close calwin; eww update cal-open=false" : "eww open calwin; eww update cal-open=true"}
+  time))
+
+
+(defwidget bigcal []
+  (box
+    (calendar :day dd
+              :month mm
+              :year yy
+              :show-details true
+              :show-heading true
+              :show-day-names true)))
+
+

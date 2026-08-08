@@ -1,0 +1,7 @@
+(deflisten layer :initial "null"
+  `$HOME/.cargo/bin/klm`)
+
+(defwidget kanata []
+  (label :text layer))
+
+

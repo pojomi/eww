@@ -1,0 +1,16 @@
+(defvar pow-hov false)
+
+(defwidget pow []
+  (eventbox :onhover `eww update pow-hov=true`
+            :onhoverlost `eww update pow-hov=false`
+            :style "padding: 9px;"
+    (box :space-evenly false
+      (revealer :transition "slideleft"
+                :reveal pow-hov
+                :duration "500ms"
+        (box
+          (button :onclick `pidof mango | xargs kill` "󰗼")
+          (button :onclick `systemctl reboot` "")))
+      (button :onclick `systemctl poweroff` "󰐥"))))
+
+
