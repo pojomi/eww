@@ -37,29 +37,19 @@
   (scroll 
           :vscroll true
           :hscroll false
-          :class `notifs`
+          :class "notifs"
           :padding 2
-    (box :orientation `v`
-          :class `notifs-box`
+    (box :orientation "v"
+          :class "notifs-box"
           :space-evenly false
           :spacing 5
+      (eventbox :onclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh;`
+        (button :halign "end"
+          (label :class "notifs-clear" 
+            :text `Clear All`)))
       (for n in dunst-notifs
         (literal :content "(dunst-btn-dyn :app `${n.app}` :txt `${n.body}` :id ${n.id})")))))
-;        (eventbox :class `notifs-event`
-;          (box :orientation `v` :halign `start` :space-evenly false
-;            (button :onrightclick `dunstctl history-rm ${n.id}; $EWW_CONFIG_DIR/scripts/eww-dunst-json;`
-;              (box :orientation `v` :space-evenly false
-;              (label :xalign 0 :wrap false :markup `<b>${n.app}</b>`)
-;              (label :xalign 0 :wrap true :class `notif` :text {n.body}))))))))
 
-(defwidget dunst-btn-dyn [app txt id]
-  (box :orientation "v" 
-       :halign "start"
-       :space-evenly false
-    (button :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh ${id}` 
-      (box :orientation "v"
-        (label :xalign 0 :wrap false :text {app})
-        (label :xalign 0 :wrap true :class `notif` :text {txt})))))
 (defvar time-visible false)
 (defvar dd `date %d`)
 (defvar mm `date %m`)
@@ -137,6 +127,12 @@
         (label :text "CPU: ${round(EWW_CPU.avg, 0)}%")
         (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 0)}%")))
     (button :onclick { hw-show ? `eww u hw-show=false` : `eww u hw-show=true` } "󰍛 ")))
+
+(defwidget dunst-btn-dyn [app txt id]
+    (button :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-dunst-rm.sh ${id}` 
+      (box :orientation "v"
+        (label :xalign 0 :wrap false :text {app})
+        (label :xalign 0 :wrap true :class `notif` :text {txt}))))
 
 (defwidget pow []
   (eventbox :onhover `eww update pow-hov=true`

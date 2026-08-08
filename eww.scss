@@ -38,6 +38,12 @@ window {
   }
 }
 
+.notifs-clear {
+  &:hover {
+    background-color: $btnbghov;
+  }
+}
+
 .notif {
   border-bottom: 1px solid $fg;
   min-width: 248px;
