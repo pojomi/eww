@@ -25,10 +25,22 @@ window {
 
 .notifs {
   background: $bg;
+  border: 1px solid $color6;
+}
+
+.notifs-box {
+  padding: 5px;
+}
+
+.notifs-event {
+  &:hover {
+    background-color: $btnbghov;
+  }
 }
 
 .notif {
   border-bottom: 1px solid $fg;
+  min-width: 248px;
 }
 
 .topbar {
