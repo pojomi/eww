@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-eww u have-notifications=true
+eww u dunst.has_notifications=true
+eww u bell=""
