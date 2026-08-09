@@ -1,4 +1,5 @@
 (defvar dunst "")
+(defvar notif_count 0)
 (defvar dunst.is_open false)
 (defvar dunst.has_notifications false)
 (defvar bell "")
@@ -34,7 +35,7 @@
           (button :halign "end"
             (label :class "notifs-clear"
               :text "Clear All")))
-        (label :text {arraylength(dunst) > 0 ? "${dunst[0].count} notifications" : "No notifications"})
+        (label :text {notif_count > 0 ? "${notif_count} notifications" : "No notifications"})
       (for n in dunst
         (literal :content
           `(dunst-btn-dyn :app {n.app} :body {n.body} :id {n.id})`)))))
