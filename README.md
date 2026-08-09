@@ -2,4 +2,4 @@
 
 ## Screenshots
 
-![./screenshots/bar.png]
+![Top Bar Screenshot](./screenshots/bar.png)
