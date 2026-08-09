@@ -64,25 +64,25 @@ button {
   }
 }
 
+label {
+  min-height: 16px;
+  min-width: 24px;
+}
+
 .focused {
   color: $focfg;
   font-weight: bold;
   background-color: $btnbghov;
 }
 
-label {
-  min-height: 16px;
-  min-width: 24px;
-}
+.packs { color: $color3; }
 
-.systray {
-}
 .systray>widget {
   &:hover {
     background-color: $btnbghov;
   }
   >image {
-  min-height: 16px;
-  min-width: 24px;
+    min-height: 16px;
+    min-width: 24px;
   }
 }

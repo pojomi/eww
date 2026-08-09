@@ -9,12 +9,11 @@
 
 (defwidget topbar-right []
   (box :space-evenly false
-       :spacing "9px"
        :halign "end"
+       :class "topbar-right"
     (notification-bell :icon bell)
     (volume)
     (packs)
-    (hw)
     (sys)
     (pow)))
 

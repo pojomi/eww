@@ -22,5 +22,5 @@
       :onchange `amixer sset Master {}%`))
     (button :onclick "amixer set Master toggle; ${muted ? `eww u muted=false;` : `eww u muted=true`}"
      :onrightclick `${EWW_CONFIG_DIR}/scripts/eww-open-pavu.sh`
-     {muted ? "" : ""}))))
+     {muted ? "" : ""}))))
 

@@ -4,7 +4,7 @@
            :space-evenly true
            :spacing 10
            :orientation "h"
-           :icon-size 18
+           :icon-size 16
            :prepend-new false))
 
 

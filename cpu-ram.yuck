@@ -9,6 +9,8 @@
             :spacing 4
         (label :text "CPU: ${round(EWW_CPU.avg, 0)}%")
         (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 0)}%")))
-    (button :onclick { hw-show ? `eww u hw-show=false` : `eww u hw-show=true` } "󰍛 ")))
+    (button :onclick { hw-show ? `eww u hw-show=false` : `eww u hw-show=true` } 
+      (box 
+        (label :justify "center" :text "")))))
 
 
