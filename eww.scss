@@ -75,8 +75,14 @@ label {
   min-width: 24px;
 }
 
+.systray {
+}
 .systray>widget {
   &:hover {
     background-color: $btnbghov;
+  }
+  >image {
+  min-height: 16px;
+  min-width: 24px;
   }
 }
