@@ -11,11 +11,11 @@
   (box :space-evenly false
        :spacing "9px"
        :halign "end"
+    (notification-bell :icon bell)
+    (volume)
     (packs)
     (hw)
     (sys)
-    (notification-bell :icon bell)
-    (volume)
     (pow)))
 
 (defwidget topbar []
